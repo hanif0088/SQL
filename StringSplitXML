@@ -1,0 +1,27 @@
+CREATE FUNCTION [dbo].[StringSplitXML]
+(
+    @String  VARCHAR(MAX), @Separator CHAR(1)
+)
+RETURNS @RESULT TABLE(Value VARCHAR(MAX))
+AS
+BEGIN    
+ DECLARE @XML XML
+SET @XML = CAST(
+    ('<i>' + REPLACE(@String, @Separator, '</i><i>') + '</i>')
+    AS XML)
+
+ INSERT INTO @RESULT
+SELECT t.i.value('.', 'VARCHAR(MAX)') 
+ FROM @XML.nodes('i') AS t(i)
+WHERE t.i.value('.', 'VARCHAR(MAX)') <> ''
+
+ RETURN
+END
+
+
+
+-- How to use this function
+--SELECT * 
+--FROM dbo.StringSplitXML('GOAT,Lebron James',',')
+
+GO
