@@ -1,0 +1,9 @@
+UPDATE dbo.MyTargetTable
+SET
+	MyTargetTable.My_Column = t2.My_Column 
+
+FROM dbo.MyTargetTable t1
+	JOIN dbo.Staging_MySourceTable t2 ON t1.My_Key = t2.My_Key
+WHERE
+	t1.My_Column <> t2.My_Column OR
+	t1.Last_Location_ID <> t2.Last_Location_ID
